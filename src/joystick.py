@@ -102,3 +102,32 @@ class Joystick:
             self.CoM_pos[0] = -self.R3[1]/5000
             
         return self.CoM_pos , self.CoM_orn , self.V , -self.angle , -self.Wrot , self.T , self.compliantMode
+
+    def show(self):
+        """
+        Print the current state of the joystick.
+
+        This function prints the current values of the joystick's linear and
+        rotational positions, velocity, angle, and angular velocity. It also
+        prints the current value of the joystick's T and compliantMode variables.
+        """
+        linear_pos = self.L3
+        rotational_pos = self.R3
+        velocity = self.V
+        angle = self.angle
+        angular_velocity = self.Wrot
+        T = self.T
+        compliant_mode = self.compliantMode
+
+        print("Joystick State:")
+        print("Linear Position:", linear_pos)
+        print("Rotational Position:", rotational_pos)
+        print("Velocity:", velocity)
+        print("Angle:", angle)
+        print("Angular Velocity:", angular_velocity)
+        print("T:", T)
+        print("Compliant Mode:", compliant_mode)
+
+if __name__ == "__main__":
+    ps4 = Joystick()
+    ps4.show()

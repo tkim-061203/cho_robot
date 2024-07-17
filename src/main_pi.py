@@ -2,11 +2,12 @@ import numpy as np
 import time
 import csv
  
-from src.kinematic_model import robotKinematics
-from src.joystick import Joystick
-from src import angleToPulse
-from src.gaitPlanner import trotGait
-from src.CoM_stabilization import stabilize
+from kinematic_model import robotKinematics
+from joystick import Joystick
+import angleToPulse
+from gaitPlanner import trotGait
+from CoM_stabilization import stabilize
+from mpu6050_read import MPU6050
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","roll","pitch"]
@@ -27,6 +28,7 @@ robotKinematics = robotKinematics()
 joystick = Joystick('/dev/input/event1') #need to specify the event route
 trot = trotGait() 
 control = stabilize()
+mpu = MPU6050()
 #robot properties
 """initial safe position"""
 #angles
@@ -74,7 +76,8 @@ for k in range(100000000000):
         t = time.time() - startTime
         
         commandPose , commandOrn , V , angle , Wrot , T , compliantMode = joystick.read()    
-        arduinoLoopTime , Xacc , Yacc , realRoll , realPitch = arduino.serialRecive()#recive serial message
+        Xacc , Yacc , Zacc = mpu.get_accel_data()
+        realRoll , realPitch = mpu.get_roll_pitch()
         
         forceModule , forceAngle , Vcompliant , collision = control.bodyCompliant(Xacc , Yacc , compliantMode)
             
