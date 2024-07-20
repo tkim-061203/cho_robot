@@ -91,6 +91,6 @@ for k in range(100000000000):
         pulsesCommand = angleToPulse.convert(FR_angles, FL_angles, BR_angles, BL_angles)
 
 
-        print (loopTime , arduinoLoopTime , realRoll , realPitch)
+        print (loopTime, realRoll , realPitch)
         
         update_data()
