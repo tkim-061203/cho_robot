@@ -4,7 +4,6 @@ import csv
  
 from kinematic_model import robotKinematics
 from joystick import Joystick
-import angleToPulse
 from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
 from mpu6050_read import MPU6050
