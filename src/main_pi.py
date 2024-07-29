@@ -8,6 +8,7 @@ import angleToPulse
 from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
 from mpu6050_read import MPU6050
+import adafruit_pca9685
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","roll","pitch"]
