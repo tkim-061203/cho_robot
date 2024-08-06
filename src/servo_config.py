@@ -25,24 +25,24 @@ class motor_config():
         
         #DefinING servo indices
         ## FRONT LEFT
-        self.front_left_hip   = 10
-        self.front_left_upper = 9
-        self.front_left_lower = 8
+        self.front_left_hip   = 0
+        self.front_left_upper = 1
+        self.front_left_lower = 2
 
         ## FRONT RIGHT
-        self.front_right_hip   = 14
-        self.front_right_upper = 13
+        self.front_right_hip   = 9
+        self.front_right_upper = 10
         self.front_right_lower = 12
 
         ## BACK LEFT
-        self.back_left_hip   = 6
-        self.back_left_upper = 5
-        self.back_left_lower = 4
+        self.back_left_hip   = 3
+        self.back_left_upper = 4
+        self.back_left_lower = 5
 
         ## BACK RIGHT
-        self.back_right_hip   = 2
-        self.back_right_upper = 1
-        self.back_right_lower = 0
+        self.back_right_hip   = 6
+        self.back_right_upper = 7
+        self.back_right_lower = 8
         """ SERVO INDICES, CALIBRATION MULTIPLIERS AND OFFSETS
             #   ROW:    which joint of leg to control 0:hip, 1: upper leg, 2: lower leg
             #   COLUMN: which leg to control. 0: front-right, 1: front-left, 2: back-right, 3: back-left.
@@ -52,9 +52,9 @@ class motor_config():
                 #  1  [front_right_upper, front_left_upper, back_right_upper, back_left_upper]
                 #  2  [front_right_lower, front_left_lower, back_right_lower, back_left_lower]] """
 
-        self.pins = np.array([[14,10,2,6], 
-                              [13,9,1,5], 
-                              [12,8,0,4]])
+        self.pins = np.array([[10,1,7,4], 
+                              [11,2,8,5], 
+                              [12,3,9,6]])
 
         self.right_leg_servo_list = [self.front_right_upper,self.front_right_lower,self.back_right_upper,self.back_right_lower]
         self.left_leg_servos_list = [ self.front_left_upper, self.front_left_lower,self.back_left_upper,self.back_left_lower]
@@ -84,7 +84,7 @@ class motor_config():
         if servo_number in self.left_leg_servos_list:
             self.kit.servo[servo_number].angle = 180 - angle
         elif servo_number in self.hip_opposite_list: #corrects hip angle such that higher numbers are angles of elevation. Higher hip values fo all lift up
-            self.kit.servo[servo_number].angle = 180 - angle
+            self.kit.servo[servo_number].angle = angle
         else:
             self.kit.servo[servo_number].angle = angle
     def relax_all_motors(self):

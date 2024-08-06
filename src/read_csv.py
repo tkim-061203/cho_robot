@@ -1,7 +1,9 @@
 import pandas as pd
+import time
+from servo_config import motor_config
 
 # Define the file path
-file_path = 'C:/Users/KIM/Desktop/pi/telemetry/robot_angle.csv'
+file_path = '../telemetry/robot_angle.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -23,8 +25,19 @@ BL_1_array = df['BL_1'].to_numpy()
 BL_2_array = df['BL_2'].to_numpy()
 BL_3_array = df['BL_3'].to_numpy()
 
-# Print the arrays to verify
-FR_1_array, FR_2_array, FR_3_array, FL_1_array, FL_2_array, FL_3_array, BR_1_array, BR_2_array, BR_3_array, BL_1_array, BL_2_array, BL_3_array
+servo = motor_config()
 
-print(FL_1_array, FL_2_array, FL_3_array, BL_1_array, BL_2_array, BL_3_array)
+servo.relax_all_motors()
+servo.moveAbsAngle(servo.front_left_hip, 0)
 
+# for i in range(len(FR_1_array)):
+#     print(FL_1_array[i],FL_2_array[i],FL_3_array[i])
+#     servo.moveAbsAngle(servo.front_left_hip, FL_1_array[i])
+#     servo.moveAbsAngle(servo.front_left_upper, FL_2_array[i])
+#     servo.moveAbsAngle(servo.front_left_lower, FL_3_array[i])
+    
+    # Add a delay of 0.5 seconds
+    # time.sleep(0.25)
+# servo.moveAbsAngle(servo.front_left_hip, FL_1_array[0])
+servo.moveAbsAngle(servo.front_left_upper, 100)
+servo.moveAbsAngle(servo.front_left_lower, 180)
