@@ -1,26 +1,13 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar  9 14:05:02 2020
-
-@author: miguel-asd
-"""
-
-from evdev import InputDevice, categorize, ecodes
-from select import select
 import numpy as np
+from pyPS4Controller.controller import Controller
+import threading
+import time
 
-class Joystick:
-    def __init__(self , event):
-        #python3 /usr/local/lib/python3.8/dist-packages/evdev/evtest.py for identify event
-        self.gamepad = InputDevice(event)
-        self.L3 = np.array([0. , 0.])
-        self.R3 = np.array([0. , 0.])
-        
-        self.x=0
-        self.triangle=0
-        self.circle=0
-        self.square=0
+class Joystick(Controller):
+    def __init__(self, **kwargs):
+        Controller.__init__(self, **kwargs)
+        self.L3 = np.array([0., 0.])
+        self.R3 = np.array([0., 0.])
         
         self.T = 0.4
         self.V = 0.
@@ -31,103 +18,107 @@ class Joystick:
         self.CoM_pos = np.zeros(3)
         self.CoM_orn = np.zeros(3)
         self.calibration = 0
-    def read(self):
-        r,w,x = select([self.gamepad.fd], [], [], 0.)
         
-        if r:
-            for event in self.gamepad.read():
-#                print(event)
-                if event.type == ecodes.EV_KEY:
-                    if event.value == 1:
-                        if event.code == 544:#up arrow
-                            self.CoM_pos[2] += 0.002
-                        if event.code == 545:#down arrow
-                            self.CoM_pos[2] -= 0.002
-                        if event.code == 547:#right arrow
-                            self.T += 0.05
-                        if event.code == 546:#left arrow
-                            self.T -= 0.05   
-                        if event.code == 308:#square
-                            if self.compliantMode == True:
-                                self.compliantMode = False
-                            elif self.compliantMode == False:
-                                self.compliantMode = True  
-                        if event.code == 307:#triangle
-                            if self.poseMode == True:
-                                self.poseMode = False
-                            elif self.poseMode == False:
-                                self.poseMode = True  
-                        if event.code == 310:#R1
-                            self.calibration += 5
-#                        if event.code == 313:#R2
-#                            self.calibration -= 0.0005
-#                            
-                        if event.code == 311:#L1
-                            self.calibration -= 5
-#                        if event.code == 312:#L2
-#                            self.CoM_orn[0] += 0.0005
-                    else:
-                        print("boton soltado")
-                ########################################  for my own joystick
-                #      ^           #     ^            #
-                #    ABS_Y         #    ABS_RY        #
-                #  ←─────→ ABS_X #  ←─────→ ABS_RX   #
-                #     ↓           #     ↓            #  
-                #######################################
-                elif event.type == ecodes.EV_ABS:
-                    absevent = categorize(event)
-                    if ecodes.bytype[absevent.event.type][absevent.event.code] == "ABS_X":  
-                        self.L3[0]=absevent.event.value-127
-                    elif ecodes.bytype[absevent.event.type][absevent.event.code] == "ABS_Y":
-                        self.L3[1]=absevent.event.value-127
-                    elif ecodes.bytype[absevent.event.type][absevent.event.code] == "ABS_RX":
-                        self.R3[0]=absevent.event.value-127
-#                        print(self.d_z)
-                    elif ecodes.bytype[absevent.event.type][absevent.event.code] == "ABS_RY":
-                        self.R3[1]=absevent.event.value-127
-        
-        if self.poseMode == False:           
-            self.V = np.sqrt(self.L3[1]**2 + self.L3[0]**2)/100.
-            self.angle = np.rad2deg(np.arctan2(-self.L3[0] , -self.L3[1]))
-            self.Wrot = -self.R3[0]/250.
-    #        Lrot = 0.
+        self.running = True
+        self.display_thread = threading.Thread(target=self.continuous_display)
+        self.display_thread.start()
+
+    def on_L3_up(self, value):
+        self.L3[1] = -value / 32767.0
+        self.update_values()
+
+    def on_L3_down(self, value):
+        self.L3[1] = value / 32767.0
+        self.update_values()
+
+    def on_L3_left(self, value):
+        self.L3[0] = -value / 32767.0
+        self.update_values()
+
+    def on_L3_right(self, value):
+        self.L3[0] = value / 32767.0
+        self.update_values()
+
+    def on_R3_up(self, value):
+        self.R3[1] = -value / 32767.0
+        self.update_values()
+
+    def on_R3_down(self, value):
+        self.R3[1] = value / 32767.0
+        self.update_values()
+
+    def on_R3_left(self, value):
+        self.R3[0] = -value / 32767.0
+        self.update_values()
+
+    def on_R3_right(self, value):
+        self.R3[0] = value / 32767.0
+        self.update_values()
+
+    def on_up_arrow_press(self):
+        self.CoM_pos[2] += 0.002
+        self.update_values()
+
+    def on_down_arrow_press(self):
+        self.CoM_pos[2] -= 0.002
+        self.update_values()
+
+    def on_right_arrow_press(self):
+        self.T += 0.05
+        self.update_values()
+
+    def on_left_arrow_press(self):
+        self.T -= 0.05
+        self.update_values()
+
+    def on_square_press(self):
+        self.compliantMode = not self.compliantMode
+        self.update_values()
+
+    def on_triangle_press(self):
+        self.poseMode = not self.poseMode
+        self.update_values()
+
+    def update_values(self):
+        if not self.poseMode:           
+            self.V = np.sqrt(self.L3[1]**2 + self.L3[0]**2)
+            self.angle = np.rad2deg(np.arctan2(-self.L3[0], -self.L3[1]))
+            self.Wrot = -self.R3[0]
             if self.V <= 0.035:
                 self.V = 0.
-            if self.Wrot <= 0.035 and self.Wrot >= -0.035:
+            if abs(self.Wrot) <= 0.035:
                 self.Wrot = 0.
         else:
-            self.CoM_orn[0] = np.deg2rad(self.R3[0]/3)
-            self.CoM_orn[1] = np.deg2rad(self.L3[1]/3)
-            self.CoM_orn[2] = -np.deg2rad(self.L3[0]/3)
-            self.CoM_pos[0] = -self.R3[1]/5000
-            
-        return self.CoM_pos , self.CoM_orn , self.V , -self.angle , -self.Wrot , self.T , self.compliantMode
+            self.CoM_orn[0] = np.deg2rad(self.R3[0] * 30)
+            self.CoM_orn[1] = np.deg2rad(self.L3[1] * 30)
+            self.CoM_orn[2] = -np.deg2rad(self.L3[0] * 30)
+            self.CoM_pos[0] = -self.R3[1] / 5
 
     def show(self):
-        """
-        Print the current state of the joystick.
-
-        This function prints the current values of the joystick's linear and
-        rotational positions, velocity, angle, and angular velocity. It also
-        prints the current value of the joystick's T and compliantMode variables.
-        """
-        linear_pos = self.L3
-        rotational_pos = self.R3
-        velocity = self.V
-        angle = self.angle
-        angular_velocity = self.Wrot
-        T = self.T
-        compliant_mode = self.compliantMode
-
+        print("\033[H\033[J", end="")  # Clear the console
         print("Joystick State:")
-        print("Linear Position:", linear_pos)
-        print("Rotational Position:", rotational_pos)
-        print("Velocity:", velocity)
-        print("Angle:", angle)
-        print("Angular Velocity:", angular_velocity)
-        print("T:", T)
-        print("Compliant Mode:", compliant_mode)
+        print(f"CoM Position: {self.CoM_pos}")
+        print(f"CoM Orientation: {self.CoM_orn}")
+        print(f"Velocity: {self.V}")
+        print(f"Angle: {-self.angle}")
+        print(f"Angular Velocity: {-self.Wrot}")
+        print(f"T: {self.T}")
+        print(f"Compliant Mode: {self.compliantMode}")
+        print(f"L3: {self.L3}")
+        print(f"R3: {self.R3}")
+
+    def continuous_display(self):
+        while self.running:
+            self.show()
+            time.sleep(0.1)  # Update every 0.1 seconds
+
+    def listen(self, timeout=30):
+        try:
+            Controller.listen(self, timeout=timeout)
+        finally:
+            self.running = False
+            self.display_thread.join()
 
 if __name__ == "__main__":
-    ps4 = Joystick()
-    ps4.show()
+    ps4 = Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
+    ps4.listen()

@@ -25,7 +25,7 @@ def update_data():
 
 
 robotKinematics = robotKinematics()
-joystick = Joystick('/dev/input/event1') #need to specify the event route
+joystick =  Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
 trot = trotGait() 
 control = stabilize()
 mpu = MPU6050()
@@ -88,8 +88,6 @@ for k in range(100000000000):
         #####   kinematics Model: Input body orientation, deviation and foot position    ####
         #####   and get the angles, neccesary to reach that position, for every joint    ####
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
-        pulsesCommand = angleToPulse.convert(FR_angles, FL_angles, BR_angles, BL_angles)
-
 
         print (loopTime, realRoll , realPitch)
         
