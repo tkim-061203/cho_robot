@@ -120,5 +120,5 @@ class Joystick(Controller):
             self.display_thread.join()
 
 if __name__ == "__main__":
-    ps4 = Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
-    ps4.listen()
+    ps4 = Joystick()
+    ps4.show()
