@@ -7,7 +7,7 @@ from joystick import Joystick
 from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
 from mpu6050_read import MPU6050
-import adafruit_pca9685
+from servo_config import motor_config
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","roll","pitch"]
@@ -29,6 +29,7 @@ joystick =  Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
 trot = trotGait() 
 control = stabilize()
 mpu = MPU6050()
+servo= motor_config()
 #robot properties
 """initial safe position"""
 #angles
@@ -90,5 +91,8 @@ for k in range(100000000000):
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
         print (loopTime, realRoll , realPitch)
-        
+
+        for i in range(len(FL_angles)):
+            print(FL_angles[0],FL_angles[1],FL_angles[2])
+
         update_data()
