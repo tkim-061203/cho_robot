@@ -92,6 +92,6 @@ for k in range(100000000000):
 
         print (loopTime, realRoll , realPitch)
 
-        print(FL_angles[0],FL_angles[1],FL_angles[2])
+        print(np.rad2deg(FL_angles[0]), np.rad2deg(FL_angles[1]), np.rad2deg(FL_angles[2]))
 
         update_data()
