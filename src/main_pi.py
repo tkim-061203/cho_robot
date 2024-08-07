@@ -92,7 +92,6 @@ for k in range(100000000000):
 
         print (loopTime, realRoll , realPitch)
 
-        for i in range(len(FL_angles)):
-            print(FL_angles[0],FL_angles[1],FL_angles[2])
+        print(FL_angles[0],FL_angles[1],FL_angles[2])
 
         update_data()
