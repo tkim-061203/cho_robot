@@ -8,6 +8,8 @@ from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
 from mpu6050_read import MPU6050
 from servo_config import motor_config
+from  keyboard import KeyboardController
+
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","roll","pitch"]
@@ -25,7 +27,8 @@ def update_data():
 
 
 robotKinematics = robotKinematics()
-joystick =  Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
+#joystick =  Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
+controller = KeyboardController()
 trot = trotGait() 
 control = stabilize()
 mpu = MPU6050()
@@ -76,7 +79,7 @@ for k in range(100000000000):
         lastTime = time.time()
         t = time.time() - startTime
         
-        commandPose , commandOrn , V , angle , Wrot , T , compliantMode = joystick.show()    
+        commandPose , commandOrn , V , angle , Wrot , T , compliantMode =   controller.listen()
         Xacc , Yacc , Zacc = mpu.get_accel_data()
         realRoll , realPitch = mpu.get_roll_pitch()
         
