@@ -7,6 +7,7 @@ file_path = '../telemetry/robot_angle.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
+df = df.round()
 
 # Display the content of the DataFrame
 df.head()  # Show the first few rows of the DataFrame
@@ -28,16 +29,15 @@ BL_3_array = df['BL_3'].to_numpy()
 servo = motor_config()
 
 servo.relax_all_motors()
-servo.moveAbsAngle(servo.front_left_hip, 0)
+servo.moveAbsAngle(servo.back_left_hip, 0)
 
-# for i in range(len(FR_1_array)):
-#     print(FL_1_array[i],FL_2_array[i],FL_3_array[i])
-#     servo.moveAbsAngle(servo.front_left_hip, FL_1_array[i])
-#     servo.moveAbsAngle(servo.front_left_upper, FL_2_array[i])
-#     servo.moveAbsAngle(servo.front_left_lower, FL_3_array[i])
+for i in range(len(BL_1_array)):
+    print(BL_1_array[i],BL_2_array[i],BL_3_array[i])
+    servo.moveAbsAngle(servo.back_left_hip, 90)
+    servo.moveAbsAngle(servo.back_left_upper, BL_2_array[i])
+    servo.moveAbsAngle(servo.back_left_lower, BL_3_array[i])
     
-    # Add a delay of 0.5 seconds
-    # time.sleep(0.25)
+    time.sleep(0.25)
 # servo.moveAbsAngle(servo.front_left_hip, FL_1_array[0])
-servo.moveAbsAngle(servo.front_left_upper, 100)
-servo.moveAbsAngle(servo.front_left_lower, 180)
+# servo.moveAbsAngle(servo.back_left_upper, 100)
+# servo.moveAbsAngle(servo.back_left_lower, 180)
