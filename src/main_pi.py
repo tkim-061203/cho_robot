@@ -73,13 +73,17 @@ T = 0.4 #period of time (in seconds) of every step
 offset = np.array([0. , 0.5 , 0.5 , 0.]) #defines the offset between each foot step in this order (FR,FL,BR,BL)
                                          # [0. , 0.25 , 0.75 , 0.5] creep gait
 interval = 0.030
+
+keyboard_thread = threading.Thread(target=controller.listen)
+keyboard_thread.start()
+
 for k in range(100000000000):
     if (time.time()-lastTime >= interval):
         loopTime = time.time() - lastTime
         lastTime = time.time()
         t = time.time() - startTime
         
-        commandPose , commandOrn , V , angle , Wrot , T , compliantMode =   controller.listen()
+        commandPose , commandOrn , V , angle , Wrot , T , compliantMode =   controller.get_command_values()
         Xacc , Yacc , Zacc = mpu.get_accel_data()
         realRoll , realPitch = mpu.get_roll_pitch()
         
@@ -98,3 +102,8 @@ for k in range(100000000000):
         print(np.rad2deg(FL_angles[0]), np.rad2deg(FL_angles[1]), np.rad2deg(FL_angles[2]))
 
         update_data()
+        if not controller.running:
+            break
+
+# K?t thuc ch??ng trinh
+keyboard_thread.join()

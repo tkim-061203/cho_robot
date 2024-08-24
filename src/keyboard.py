@@ -117,6 +117,20 @@ class KeyboardController:
         finally:
             self.running = False
             self.display_thread.join()
+    def get_command_values(self):
+        """
+        Returns:
+            tuple: (commandPose, commandOrn, V, angle, Wrot, T, compliantMode)
+        """
+        commandPose = self.CoM_pos
+        commandOrn = self.CoM_orn
+        V = self.V
+        angle = -self.angle 
+        Wrot = -self.Wrot
+        T = self.T
+        compliantMode = self.compliantMode
+
+        return commandPose, commandOrn, V, angle, Wrot, T, compliantMode
 
 if __name__ == "__main__":
     controller = KeyboardController()
