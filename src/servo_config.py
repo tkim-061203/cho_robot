@@ -52,9 +52,9 @@ class motor_config():
                 #  1  [front_right_upper, front_left_upper, back_right_upper, back_left_upper]
                 #  2  [front_right_lower, front_left_lower, back_right_lower, back_left_lower]] """
 
-        self.pins = np.array([[10,1,7,4], 
-                              [11,2,8,5], 
-                              [12,3,9,6]])
+        self.pins = np.array([[9,0,6,3], 
+                              [10,1,7,4], 
+                              [11,2,8,5]])
 
         self.right_leg_servo_list = [self.front_right_upper,self.front_right_lower,self.back_right_upper,self.back_right_lower]
         self.left_leg_servos_list = [ self.front_left_upper, self.front_left_lower,self.back_left_upper,self.back_left_lower]
@@ -82,11 +82,11 @@ class motor_config():
         
         # Takes 180-angle so that the movement it the same as the right lef
         if servo_number in self.left_leg_servos_list:
-            self.kit.servo[servo_number].angle = angle
+            self.kit.servo[servo_number].angle = 180 - angle
         elif servo_number in self.hip_opposite_list: #corrects hip angle such that higher numbers are angles of elevation. Higher hip values fo all lift up
-            self.kit.servo[servo_number].angle = angle
+            self.kit.servo[servo_number].angle = abs(angle)
         else:
-            self.kit.servo[servo_number].angle = angle
+            self.kit.servo[servo_number].angle = abs(angle)
     def relax_all_motors(self):
         """Relaxes desired servos so that they appear to be turned off. 
 
