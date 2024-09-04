@@ -3,9 +3,9 @@ import numpy as np
 import time
 import pybullet_data
 from pybullet_debuger import pybulletDebug  
-from kinematic_model import robotKinematics
-from gaitPlanner import trotGait
-from servo_config import motor_config
+from ..kinematic_model import robotKinematics
+from ..gaitPlanner import trotGait
+from ..servo_config import motor_config
 
 
 physicsClient = p.connect(p.GUI)#or p.DIRECT for non-graphical version
@@ -21,7 +21,7 @@ cubeStartPos = [0,0,0.2]
 FixedBase = False #if fixed no plane is imported
 if (FixedBase == False):
     p.loadURDF("plane.urdf")
-boxId = p.loadURDF("C:/Users/KIM/OneDrive - VNU-HCMUS/Study/Project/dog/4-legged-robot-model-1_PCsimulation/src/4leggedRobot_with_sensors.urdf",cubeStartPos, useFixedBase=FixedBase)
+boxId = p.loadURDF("4leggedRobot_with_sensors.urdf",cubeStartPos, useFixedBase=FixedBase)
 
 jointIds = []
 paramIds = [] 
@@ -86,6 +86,8 @@ while(True):
     servo.moveAbsAngle(servo.back_left_hip, 90)
     servo.moveAbsAngle(servo.back_left_upper, np.rad2deg(BL_angles[2]))
     servo.moveAbsAngle(servo.back_left_lower, np.rad2deg(BL_angles[3]))
+    
+    time.sleep(0.25)
 
 #    print(time.time() - lastTime)
 p.disconnect()
