@@ -8,7 +8,6 @@ from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
 from mpu6050_read import MPU6050
 from servo_config import motor_config
-from  keyboard import KeyboardController
 
 
 ##This part of code is just to save the raw telemetry data.
@@ -28,7 +27,6 @@ def update_data():
 
 robotKinematics = robotKinematics()
 #joystick =  Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
-controller = KeyboardController()
 trot = trotGait() 
 control = stabilize()
 mpu = MPU6050()
@@ -74,8 +72,6 @@ offset = np.array([0. , 0.5 , 0.5 , 0.]) #defines the offset between each foot s
                                          # [0. , 0.25 , 0.75 , 0.5] creep gait
 interval = 0.030
 
-keyboard_thread = threading.Thread(target=controller.listen)
-keyboard_thread.start()
 
 for k in range(100000000000):
     if (time.time()-lastTime >= interval):
@@ -102,8 +98,3 @@ for k in range(100000000000):
         print(np.rad2deg(FL_angles[0]), np.rad2deg(FL_angles[1]), np.rad2deg(FL_angles[2]))
 
         update_data()
-        if not controller.running:
-            break
-
-# K?t thuc ch??ng trinh
-keyboard_thread.join()

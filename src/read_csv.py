@@ -3,7 +3,7 @@ import time
 from servo_config import motor_config
 
 # Define the file path
-file_path = '../telemetry/data.csv'
+file_path = '../telemetry/robot_angles.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path,on_bad_lines='skip')
