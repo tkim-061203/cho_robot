@@ -23,7 +23,7 @@ bl_angles_list = []
 
 cubeStartPos = [0,0,0.2]
 FixedBase = False #if fixed no plane is imported
-urdf_path = os.path.join(os.path.dirname(__file__), '../pybullet/4leggedRobot_with_sensors.urdf')
+urdf_path = os.path.join(os.path.dirname(__file__), '../4leggedRobot_with_sensors.urdf')
 
 if (FixedBase == False):
     p.loadURDF("plane.urdf")
