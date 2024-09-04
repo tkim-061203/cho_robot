@@ -17,7 +17,7 @@ class pybulletDebug:
         self.rollId = p.addUserDebugParameter("roll" , -np.pi/4 , np.pi/4 , 0.)
         self.pitchId = p.addUserDebugParameter("pitch" , -np.pi/4 , np.pi/4 , 0.)
         self.yawId = p.addUserDebugParameter("yaw" , -np.pi/4 , np.pi/4 , 0.)
-        self.LId = p.addUserDebugParameter("L" , -0.5 , 1.5 , 0.5)
+        self.LId = p.addUserDebugParameter("L" , -0.5 , 1.5 , 0.)
         self.LrotId = p.addUserDebugParameter("Lrot" , -1.5 , 1.5 , 0.)
         self.angleId = p.addUserDebugParameter("angleWalk" , -180. , 180. , 0.)
         self.periodId = p.addUserDebugParameter("stepPeriod" , 0.1 , 3. , 2.5)

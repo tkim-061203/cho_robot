@@ -82,7 +82,7 @@ class motor_config():
         
         # Takes 180-angle so that the movement it the same as the right lef
         if servo_number in self.left_leg_servos_list:
-            self.kit.servo[servo_number].angle = 180 - angle
+            self.kit.servo[servo_number].angle = 180 - abs(angle)
         elif servo_number in self.hip_opposite_list: #corrects hip angle such that higher numbers are angles of elevation. Higher hip values fo all lift up
             self.kit.servo[servo_number].angle = abs(angle)
         else:

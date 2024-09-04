@@ -3,10 +3,10 @@ import time
 from servo_config import motor_config
 
 # Define the file path
-file_path = '../telemetry/robot_angles.csv'
+file_path = '../telemetry/data.csv'
 
 # Read the CSV file
-df = pd.read_csv(file_path)
+df = pd.read_csv(file_path,on_bad_lines='skip')
 df = df.round()
 
 # Display the content of the DataFrame
@@ -33,11 +33,11 @@ servo.moveAbsAngle(servo.back_left_hip, 0)
 
 for i in range(len(BL_1_array)):
     print(BL_1_array[i],BL_2_array[i],BL_3_array[i])
-    servo.moveAbsAngle(servo.back_left_hip, 90)
+    servo.moveAbsAngle(servo.back_left_hip, 180)
     servo.moveAbsAngle(servo.back_left_upper, BL_2_array[i])
     servo.moveAbsAngle(servo.back_left_lower, BL_3_array[i])
     
-    time.sleep(0.25)
+    time.sleep(0.01)
 # servo.moveAbsAngle(servo.front_left_hip, FL_1_array[0])
 # servo.moveAbsAngle(servo.back_left_upper, 100)
 # servo.moveAbsAngle(servo.back_left_lower, 180)

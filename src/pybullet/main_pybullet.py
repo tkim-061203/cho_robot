@@ -1,14 +1,18 @@
+import sys
+import os
 import pybullet as p
 import numpy as np
 import time
 import pybullet_data
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+
 from pybullet_debuger import pybulletDebug  
-from ..kinematic_model import robotKinematics
-from ..gaitPlanner import trotGait
-from ..servo_config import motor_config
+from kinematic_model import robotKinematics
+from gaitPlanner import trotGait
+from servo_config import motor_config
 
 
-physicsClient = p.connect(p.GUI)#or p.DIRECT for non-graphical version
+physicsClient = p.connect(p.DIRECT)#or p.DIRECT for non-graphical version
 p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally
 p.setGravity(0,0,-9.8)
 
@@ -19,9 +23,11 @@ bl_angles_list = []
 
 cubeStartPos = [0,0,0.2]
 FixedBase = False #if fixed no plane is imported
+urdf_path = os.path.join(os.path.dirname(__file__), '../pybullet/4leggedRobot_with_sensors.urdf')
+
 if (FixedBase == False):
     p.loadURDF("plane.urdf")
-boxId = p.loadURDF("4leggedRobot_with_sensors.urdf",cubeStartPos, useFixedBase=FixedBase)
+boxId = p.loadURDF(urdf_path,cubeStartPos, useFixedBase=FixedBase)
 
 jointIds = []
 paramIds = [] 
@@ -83,11 +89,11 @@ while(True):
     for i in range(footBR_index + 1, footBL_index):
         p.setJointMotorControl2(boxId, i, p.POSITION_CONTROL, BL_angles[i - footBL_index])
     
-    servo.moveAbsAngle(servo.back_left_hip, 90)
+    servo.moveAbsAngle(servo.back_left_hip, 180)
     servo.moveAbsAngle(servo.back_left_upper, np.rad2deg(BL_angles[2]))
     servo.moveAbsAngle(servo.back_left_lower, np.rad2deg(BL_angles[3]))
     
-    time.sleep(0.25)
+    time.sleep(0.01)
 
 #    print(time.time() - lastTime)
 p.disconnect()
