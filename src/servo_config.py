@@ -32,7 +32,7 @@ class motor_config():
         ## FRONT RIGHT
         self.front_right_hip   = 9
         self.front_right_upper = 10
-        self.front_right_lower = 12
+        self.front_right_lower = 11
 
         ## BACK LEFT
         self.back_left_hip   = 3
