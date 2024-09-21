@@ -29,22 +29,33 @@ BL_3_array = df['BL_3'].to_numpy()
 servo = motor_config()
 
 servo.relax_all_motors()
+time.sleep(2)
+while True:
+    for i in range(len(BL_1_array)):
+        servo.moveAbsAngle(servo.front_left_hip, FL_1_array[i])
+        servo.moveAbsAngle(servo.front_left_upper, FL_2_array[i])
+        servo.moveAbsAngle(servo.front_left_lower, FL_3_array[i])
+        print("Xong FL")
+        servo.moveAbsAngle(servo.front_right_hip, FR_1_array[i])
+        servo.moveAbsAngle(servo.front_right_upper, FR_2_array[i])
+        servo.moveAbsAngle(servo.front_right_lower, FR_3_array[i])
+        print("Xong FR")
+        servo.moveAbsAngle(servo.back_right_hip, BR_1_array[i])
+        servo.moveAbsAngle(servo.back_right_upper, BR_2_array[i])
+        servo.moveAbsAngle(servo.back_right_lower, BR_3_array[i])
+        print("Xong BR")
+        servo.moveAbsAngle(servo.back_left_hip, BL_1_array[i])
+        servo.moveAbsAngle(servo.back_left_upper, BL_2_array[i])
+        servo.moveAbsAngle(servo.back_left_lower, BL_3_array[i])
+        print("Xong BL")
 
-for i in range(len(BL_1_array)):
-    print(BL_2_array[i],BL_3_array[i])
-    servo.moveAbsAngle(servo.front_right_hip, FR_1_array[i])
-    servo.moveAbsAngle(servo.front_right_upper, FR_2_array[i])
-    servo.moveAbsAngle(servo.front_right_lower, FR_3_array[i])
-    servo.moveAbsAngle(servo.back_right_hip, BR_1_array[i])
-    servo.moveAbsAngle(servo.back_right_upper, BR_2_array[i])
-    servo.moveAbsAngle(servo.back_right_lower, BR_3_array[i])
     
     time.sleep(0.01)
 
 ## HIP
 # for i in range(len(BL_1_array)):
 #     print(FL_1_array[i],BL_1_array[i],BR_1_array[i],FR_1_array[i])
-#     servo.moveAbsAngle(servo.front_right_hip, FL_1_array[i])
-#     servo.moveAbsAngle(servo.back_right_hip, BL_1_array[i])
+#     servo.moveAbsAngle(servo.front_left_hip, FL_1_array[i])
+#     servo.moveAbsAngle(servo.back_left_hip, BL_1_array[i])
 #     servo.moveAbsAngle(servo.back_right_hip, BR_1_array[i])
 #     servo.moveAbsAngle(servo.front_right_hip, FR_1_array[i])
