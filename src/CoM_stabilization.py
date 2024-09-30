@@ -1,15 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Apr 14 18:30:37 2020
-
-@author: miguel-asd
-"""
 import numpy as np
 from simple_pid import PID
 
 class stabilize:
     def __init__(self):        
+        """
+        Initialize PID controllers for x, y, roll and pitch.
+        Also, define the initial CoM position and the parameters for the compliant control.
+        """
         self.CoM = np.array([-0.01 , 0. , 0.01])
         
         self.pidX = PID(-0.0005 , 0. , 0.00001 , setpoint=0.)
@@ -31,7 +28,7 @@ class stabilize:
         self.Lcompliant = []
         self.i = 0
     def centerPoint(self , actualPitch , actualRoll):
-            
+                    
         Upid_xorn = self.pidRoll(actualRoll)
         Upid_yorn = self.pidPitch(actualPitch)
         Upid_x = self.pidX(actualPitch)
@@ -41,6 +38,20 @@ class stabilize:
     
     
     def bodyCompliant(self , Xacc , Yacc , compliantMode):
+        """
+        This function is used for body compliant control. If the compliant mode is activated, and the acceleration in x or y direction is higher than 7000, then a collision is detected and the robot starts to move compliantly. The force angle is calculated and the compliant length is calculated from the force module. The compliant length is then decreased linearly until it is zero. The function returns the force module, the force angle, the compliant length and a boolean indicating if the robot is in collision or not.
+        
+        Parameters:
+        Xacc (float): acceleration in x direction
+        Yacc (float): acceleration in y direction
+        compliantMode (bool): boolean indicating if the compliant mode is activated
+        
+        Returns:
+        forceModule (float): force module
+        forceAngle (float): force angle in degrees
+        Lcompliant (float): compliant length
+        collision (bool): boolean indicating if the robot is in collision or not
+        """
         if compliantMode == True:
             if Xacc >= 7000 or Yacc >= 7000:
                self.collision = True
