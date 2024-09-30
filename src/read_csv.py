@@ -3,7 +3,7 @@ import time
 from servo_config import motor_config
 
 # Define the file path
-file_path = '../telemetry/robot_angles.csv'
+file_path = '../telemetry/stable_robot_angles.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path,on_bad_lines='skip')
@@ -30,6 +30,8 @@ servo = motor_config()
 
 servo.relax_all_motors()
 time.sleep(2)
+
+
 while True:
     for i in range(len(BL_1_array)):
         servo.moveAbsAngle(servo.front_left_hip, FL_1_array[i])
@@ -49,7 +51,6 @@ while True:
         servo.moveAbsAngle(servo.back_left_lower, BL_3_array[i])
         print("Xong BL")
 
-    
     time.sleep(0.01)
 
 ## HIP
