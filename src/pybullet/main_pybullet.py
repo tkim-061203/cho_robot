@@ -12,7 +12,7 @@ from gaitPlanner import trotGait
 from servo_config import motor_config
 
 
-physicsClient = p.connect(p.DIRECT)#or p.DIRECT for non-graphical version
+physicsClient = p.connect(p.GUI)#or p.DIRECT for non-graphical version
 p.setAdditionalSearchPath(pybullet_data.getDataPath()) #optionally
 p.setGravity(0,0,-9.8)
 
@@ -35,7 +35,7 @@ time.sleep(0.5)
 servo = motor_config()
 servo.relax_all_motors()
 for j in range(p.getNumJoints(boxId)):
-#    p.changeDynamics(boxId, j, linearDamping=0, angularDamping=0)
+    p.changeDynamics(boxId, j, linearDamping=0, angularDamping=0)
     info = p.getJointInfo(boxId, j)
     print(info)
     jointName = info[1]
@@ -78,7 +78,6 @@ while(True):
 #####   kinematics Model: Input body orientation, deviation and foot position    ####
 #####   and get the angles, neccesary to reach that position, for every joint    ####
     FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet = robotKinematics.solve(orn , pos , bodytoFeet)
-    #print("FR:", FR_angles, "FL:", FL_angles, "BR:", BR_angles, "BL:", BL_angles)
     #move movable joints
     for i in range(0, footFR_index):
         p.setJointMotorControl2(boxId, i, p.POSITION_CONTROL, FR_angles[i - footFR_index])
@@ -88,12 +87,9 @@ while(True):
         p.setJointMotorControl2(boxId, i, p.POSITION_CONTROL, BR_angles[i - footBR_index])
     for i in range(footBR_index + 1, footBL_index):
         p.setJointMotorControl2(boxId, i, p.POSITION_CONTROL, BL_angles[i - footBL_index])
-    
-    servo.moveAbsAngle(servo.back_left_hip, 180)
-    servo.moveAbsAngle(servo.back_left_upper, np.rad2deg(BL_angles[2]))
-    servo.moveAbsAngle(servo.back_left_lower, np.rad2deg(BL_angles[3]))
+
     
     time.sleep(0.01)
 
 #    print(time.time() - lastTime)
-p.disconnect()
+    p.disconnect()
