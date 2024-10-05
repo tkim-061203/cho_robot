@@ -12,12 +12,12 @@ from servo_config import motor_config
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","roll","pitch"]
-with open('telemetry/data.csv','w') as csv_file:
+with open('/home/kim/cho_robot/telemetry/data_t.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
 def update_data():
-    with open('telemetry/data.csv','a') as csv_file:
+    with open('/home/kim/cho_robot/telemetry/data_t.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" :  t,
                 "roll" : realRoll,
@@ -26,7 +26,7 @@ def update_data():
 
 
 robotKinematics = robotKinematics()
-#joystick =  Joystick(interface="/dev/input/js0", connecting_using_ds4drv=False)
+joystick =  Joystick('/dev/input/event5')
 trot = trotGait() 
 control = stabilize()
 mpu = MPU6050()
