@@ -10,9 +10,41 @@ import numpy as np
 
 #function neccesary to build a parametrized bezier curve 
 def f(n,k): #calculates binomial factor (n k)
+    """
+    Calculates the binomial coefficient (n k), also known as "n choose k".
+    
+    Parameters
+    ----------
+    n : int
+        The number of items to choose from.
+    k : int
+        The number of items to choose.
+    
+    Returns
+    -------
+    int
+        The binomial coefficient.
+    """
     return np.math.factorial(n)/(np.math.factorial(k)*np.math.factorial(n-k))
 
 def b(t,k,point):
+    """
+    Evaluates a single point of a Bezier curve of degree n at time t.
+
+    Parameters
+    ----------
+    t : float
+        Time parameter, between 0 and 1.
+    k : int
+        Index of the point (0 <= k <= n).
+    point : array_like
+        Control point P_k.
+
+    Returns
+    -------
+    array_like
+        Point of the Bezier curve at time t.
+    """
     n = 9 #10 points bezier curve
     return point*f(n,k)*np.power(t,k)*np.power(1-t,n-k)
 
@@ -30,6 +62,23 @@ class trotGait:
     """This trajectory planning is mostly based on: 
     https://www.researchgate.net/publication/332374021_Leg_Trajectory_Planning_for_Quadruped_Robots_with_High-Speed_Trot_Gait"""
     def calculateStance(self , phi_st , V , angle):#phi_st between [0,1), angle in degrees
+        """
+        Calculates a single point of the stance phase of the trot gait.
+        
+        Parameters
+        ----------
+        phi_st : float
+            Time parameter, between 0 and 1.
+        V : float
+            Velocity of the robot.
+        angle : float
+            Angle of the robot in degrees.
+        
+        Returns
+        -------
+        tuple of 3 floats
+            Point of the stance phase at time phi_st.
+        """
         c = np.cos(np.deg2rad(angle))#cylindrical coordinates
         s = np.sin(np.deg2rad(angle))
         
@@ -46,6 +95,23 @@ class trotGait:
         
     def calculateBezier_swing(self , phi_sw , V , angle):#phi between [0,1), angle in degrees
     #curve generator https://www.desmos.com/calculator/xlpbe9bgll
+        """
+        Calculates a single point of the swing phase of the trot gait.
+        
+        Parameters
+        ----------
+        phi_sw : float
+            Time parameter, between 0 and 1.
+        V : float
+            Velocity of the robot.
+        angle : float
+            Angle of the robot in degrees.
+        
+        Returns
+        -------
+        tuple of 3 floats
+            Point of the swing phase at time phi_sw.
+        """
         c = np.cos(np.deg2rad(angle))#cylindrical coordinates
         s = np.sin(np.deg2rad(angle))
 #        if (phi >= 0.75 or phi < 0.25):
@@ -101,6 +167,27 @@ class trotGait:
 
 
     def stepTrajectory(self , phi , V , angle , Wrot , centerToFoot): #phi belong [0,1), angles in degrees
+        """
+        Calculate the step trajectory.
+        
+        Parameters
+        ----------
+        phi : float
+            Normalized phase of the step cycle, belongs to [0,1).
+        V : float
+            Velocity of the robot.
+        angle : float
+            Angle of the robot in degrees.
+        Wrot : float
+            Angular velocity of the robot in degrees per second.
+        centerToFoot : array of 3 floats
+            Position of the foot with respect to the center of the robot.
+        
+        Returns
+        -------
+        coord : array of 3 floats
+            Position of the foot with respect to the center of the robot.
+        """
         if (phi >= 1):
             phi = phi - 1.
         #step describes a circuference in order to rotate
@@ -142,8 +229,10 @@ class trotGait:
         return coord 
         
         
-    #computes step trajectory for every foot, defining L which is like velocity command, its angle, 
+    """
+    computes step trajectory for every foot, defining L which is like velocity command, its angle, 
     #offset between each foot, period of time of each step and the initial vector from center of robot to feet.
+    """ 
     def loop(self , V , angle , Wrot , T , offset , bodytoFeet_ ):
         
         if T <= 0.01: 
