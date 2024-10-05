@@ -20,6 +20,10 @@ class Joystick:
         self.T = 0.4
         self.compliantMode = False
         self.CoM_move = np.zeros(3)
+
+        self.yaw = 0.0  # Initialize yaw
+        self.pitch = 0.0  # Initialize pitch
+        
     def read(self):
         r, w, x = select([self.gamepad.fd], [], [], 0.)
         
@@ -27,13 +31,13 @@ class Joystick:
             for event in self.gamepad.read():
                 if event.type == ecodes.EV_KEY:
                     if event.code == 308:  # Square button
-                        if event.value == 1:  # Button pressed
+                        if event.value == 1:
                             self.compliantMode = not self.compliantMode
                     elif event.code == 310:  # R1 button
-                        if event.value == 1:  # Button pressed
+                        if event.value == 1:
                             self.CoM_move[0] += 0.0005
                     elif event.code == 311:  # L1 button
-                        if event.value == 1:  # Button pressed
+                        if event.value == 1:
                             self.CoM_move[0] -= 0.0005
                 
                 elif event.type == ecodes.EV_ABS:
@@ -49,23 +53,21 @@ class Joystick:
                         self.L3[1] = event.value - 127
                     elif event.code == 3:  # Right stick X-axis
                         self.R3[0] = event.value - 127
+                        self.yaw = np.deg2rad(self.R3[0] / 3)
                     elif event.code == 4:  # Right stick Y-axis
                         self.R3[1] = event.value - 127
-                        
-        L = np.sqrt(self.L3[1]**2 + self.L3[0]**2)/250.
-        angle = np.rad2deg(np.arctan2(-self.L3[0] , -self.L3[1]))
-        Lrot = -self.R3[0]/250.
-#        Lrot = 0.
+                        self.pitch = np.deg2rad(self.R3[1] / 2)
+
+        L = np.sqrt(self.L3[1]**2 + self.L3[0]**2) / 250.
+        angle = np.rad2deg(np.arctan2(-self.L3[0], -self.L3[1]))
+        Wrot = -self.R3[0] / 250.
+
         if L <= 0.035:
             L = 0.
-        if Lrot <= 0.035 and Lrot >= -0.035:
-            Lrot = 0.
-            
-#        pitch = np.deg2rad(self.R3[1]/2)
-#        yaw = np.deg2rad(self.R3[0]/3)
-        pitch = 0.
-        yaw = 0.
-        return self.CoM_move , L , -angle , -Lrot , self.T , self.compliantMode , yaw , pitch
+        if -0.035 <= Wrot <= 0.035:
+            Wrot = 0.
+
+        return self.CoM_move, L, -angle, -Wrot, self.T, self.compliantMode, self.yaw, self.pitch
 
 # if __name__ == "__main__":
 #     joy = Joystick('/dev/input/event5')  # Replace with your event file
