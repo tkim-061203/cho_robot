@@ -39,10 +39,10 @@ class Joystick:
                             self.compliantMode = not self.compliantMode
                     elif event.code == 310:  # R1 button
                         if event.value == 1:
-                            self.CoM_move[0] += 0.0005
+                            self.CoM_orn[0] += 0.0005
                     elif event.code == 311:  # L1 button
                         if event.value == 1:
-                            self.CoM_move[0] -= 0.0005
+                            self.CoM_orn[0] -= 0.0005
                     elif event.code == 307:#triangle
                         if event.value == 1:
                             if self.poseMode == True:
@@ -84,16 +84,16 @@ class Joystick:
 
         return self.CoM_pos , self.CoM_orn , self.V , -self.angle , -self.Wrot , self.T , self.compliantMode
 
-# if __name__ == "__main__":
-#     joy = Joystick('/dev/input/event5')  # Replace with your event file
+if __name__ == "__main__":
+    joy = Joystick('/dev/input/event5')  # Replace with your event file
 
-# while True:
-#     # Read joystick input
-#     CoM_move, L, angle, Lrot, T, compliantMode, yaw, pitch = joy.read()
+while True:
+    # Read joystick input
+    commandPose , commandOrn , V , angle , Wrot , T , compliantMode = joy.read()
 
-#     # Print the values
-#     print(f"CoM_move: {CoM_move}, L: {L}, angle: {angle}, Lrot: {Lrot}")
-#     print(f"T: {T}, compliantMode: {compliantMode}, yaw: {yaw}, pitch: {pitch}")
+    # Print the values
+    print(f"commandPose: {commandPose}, commandOrn: {commandOrn}, angle: {angle}, V: {V}")
+    print(f"T: {T}, compliantMode: {compliantMode}, Wrot: {Wrot}")
 
-#     # Add a small delay to avoid excessive CPU usage
-#     time.sleep(0.01)
+    # Add a small delay to avoid excessive CPU usage
+    time.sleep(0.01)
