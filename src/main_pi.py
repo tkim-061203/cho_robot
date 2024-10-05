@@ -79,7 +79,7 @@ for k in range(100000000000):
         lastTime = time.time()
         t = time.time() - startTime
         
-        commandCoM , V , angle , Wrot , T  , compliantMode , yaw , pitch =   joystick.read()
+        commandPose , commandOrn , V , angle , Wrot , T , compliantMode =   joystick.read()
         Xacc , Yacc , Zacc = mpu.get_accel_data()
         realRoll , realPitch = mpu.get_roll_pitch()
         
