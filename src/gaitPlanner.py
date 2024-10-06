@@ -25,7 +25,7 @@ def f(n,k): #calculates binomial factor (n k)
     int
         The binomial coefficient.
     """
-    return np.math.factorial(n)/(np.math.factorial(k)*np.math.factorial(n-k))
+    return np.emath.factorial(n)/(np.emath.factorial(k)*np.emath.factorial(n-k))
 
 def b(t,k,point):
     """

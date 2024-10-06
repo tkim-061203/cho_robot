@@ -37,7 +37,6 @@ servo.relax_all_motors()
 for j in range(p.getNumJoints(boxId)):
     p.changeDynamics(boxId, j, linearDamping=0, angularDamping=0)
     info = p.getJointInfo(boxId, j)
-    print(info)
     jointName = info[1]
     jointType = info[2]
     jointIds.append(j)
