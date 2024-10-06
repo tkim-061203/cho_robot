@@ -16,13 +16,13 @@ with open('/home/kim/cho_robot/telemetry/data_t.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
-def update_data():
-    with open('/home/kim/cho_robot/telemetry/data_t.csv','a') as csv_file:
-        csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
-        info = {"t" :  t,
-                "roll" : realRoll,
-                "pitch" : realPitch}
-        csv_writer.writerow(info)
+# def update_data():
+#     with open('/home/kim/cho_robot/telemetry/data_t.csv','a') as csv_file:
+#         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
+#         info = {"t" :  t,
+#                 "roll" : realRoll,
+#                 "pitch" : realPitch}
+#         csv_writer.writerow(info)
 
 
 robotKinematics = robotKinematics()
@@ -80,8 +80,10 @@ for k in range(100000000000):
         t = time.time() - startTime
         
         commandPose , commandOrn , V , angle , Wrot , T , compliantMode =   joystick.read()
-        Xacc , Yacc , Zacc = mpu.get_accel_data()
-        realRoll , realPitch = mpu.get_roll_pitch()
+        # Xacc , Yacc , Zacc = mpu.get_accel_data()
+        # realRoll , realPitch = mpu.get_roll_pitch()
+        Xacc = 0
+        Yacc = 0
         
         forceModule , forceAngle , Vcompliant , collision = control.bodyCompliant(Xacc , Yacc , compliantMode)
             
@@ -93,8 +95,8 @@ for k in range(100000000000):
         #####   and get the angles, neccesary to reach that position, for every joint    ####
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
-        print (loopTime, realRoll , realPitch)
+        # print (loopTime, realRoll , realPitch)
 
         print(np.rad2deg(FL_angles[0]), np.rad2deg(FL_angles[1]), np.rad2deg(FL_angles[2]))
 
-        update_data()
+        # update_data()

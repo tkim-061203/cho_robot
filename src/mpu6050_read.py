@@ -19,6 +19,8 @@ GYRO_ZOUT_H = 0x47
 WHO_AM_I = 0x75
 
 bus = smbus.SMBus(1)  # or bus = smbus.SMBus(0) for older version boards
+sleep(1)
+bus.open(1)
 
 def MPU_Init():
     # Wake up the MPU-6050
@@ -34,7 +36,7 @@ def MPU_Init():
     bus.write_byte_data(DEVICE_ADDRESS, PWR_MGMT_1, 0x01)  # Auto select best available clock source
 
     # Enable all sensors
-    bus.write_byte_data(DEVICE_ADDRESS, PWR_MGMT_2, 0x00)
+    bus.write_byte_data(DEVICE_ADDRESS, PWR_MGMT_1, 0x00)
 
     # Set sample rate to 1kHz
     bus.write_byte_data(DEVICE_ADDRESS, SMPLRT_DIV, 0x07)
