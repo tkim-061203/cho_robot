@@ -69,7 +69,7 @@ GYRO_YOUT_H  = 0x45
 GYRO_ZOUT_H  = 0x47
 
 bus = smbus.SMBus(1) 	# or bus = smbus.SMBus(0) for older version boards
-sleep(10) #wait here to avoid 121 IO Error
+sleep(1) #wait here to avoid 121 IO Error
 
 Device_Address = 0x68   # MPU6050 device address
 
@@ -109,9 +109,8 @@ MPU_Init()
 
 print (" Reading Data of Gyroscope and Accelerometer")
 
-try:
-    while True:
-        
+while True:
+
         #Read Accelerometer raw value
         acc_x = read_raw_data(ACCEL_XOUT_H)
         acc_y = read_raw_data(ACCEL_YOUT_H)
@@ -123,6 +122,13 @@ try:
         gyro_z = read_raw_data(GYRO_ZOUT_H)
         
         #Full scale range +/- 250 degree/C as per sensitivity scale factor
+
+        acc_y=0
+        acc_z=0
+        gyro_x=0
+        gyro_y=0
+        gyro_z=0
+
         Ax = acc_x/16384.0
         Ay = acc_y/16384.0
         Az = acc_z/16384.0
@@ -134,5 +140,3 @@ try:
 
         print ("Gx=%.2f" %Gx, u'\u00b0'+ "/s", "\tGy=%.2f" %Gy, u'\u00b0'+ "/s", "\tGz=%.2f" %Gz, u'\u00b0'+ "/s", "\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az) 	
         sleep(1)
-except OSError as e:
-    print(f"Error reading data: {e}")
