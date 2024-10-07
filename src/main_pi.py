@@ -6,7 +6,7 @@ from kinematic_model import robotKinematics
 from joystick import Joystick
 from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
-from mpu6050_read import MPU6050
+# from mpu6050_read import MPU6050
 from servo_config import motor_config
 
 
@@ -29,7 +29,7 @@ robotKinematics = robotKinematics()
 joystick =  Joystick('/dev/input/event5')
 trot = trotGait() 
 control = stabilize()
-mpu = MPU6050()
+# mpu = MPU6050()
 servo= motor_config()
 #robot properties
 """initial safe position"""
@@ -71,6 +71,7 @@ T = 0.4 #period of time (in seconds) of every step
 offset = np.array([0. , 0.5 , 0.5 , 0.]) #defines the offset between each foot step in this order (FR,FL,BR,BL)
                                          # [0. , 0.25 , 0.75 , 0.5] creep gait
 interval = 0.030
+print("Finish setup")
 
 
 for k in range(100000000000):
