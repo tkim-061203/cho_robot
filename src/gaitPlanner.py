@@ -7,6 +7,7 @@ Created on Wed Mar 11 16:38:15 2020
 """
 import time
 import numpy as np
+import math
 
 #function neccesary to build a parametrized bezier curve 
 def f(n,k): #calculates binomial factor (n k)
@@ -25,7 +26,7 @@ def f(n,k): #calculates binomial factor (n k)
     int
         The binomial coefficient.
     """
-    return np.emath.factorial(n)/(np.emath.factorial(k)*np.emath.factorial(n-k))
+    return math.factorial(n)/(math.factorial(k)*math.factorial(n-k))
 
 def b(t,k,point):
     """
