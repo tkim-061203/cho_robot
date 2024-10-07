@@ -94,10 +94,12 @@ for k in range(100000000000):
         #####################################################################################
         #####   kinematics Model: Input body orientation, deviation and foot position    ####
         #####   and get the angles, neccesary to reach that position, for every joint    ####
-        FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
+        FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet, __ = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
         # print (loopTime, realRoll , realPitch)
 
         print(np.rad2deg(FL_angles[0]), np.rad2deg(FL_angles[1]), np.rad2deg(FL_angles[2]))
+
+        
 
         # update_data()
