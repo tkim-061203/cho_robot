@@ -73,6 +73,20 @@ offset = np.array([0. , 0.5 , 0.5 , 0.]) #defines the offset between each foot s
 interval = 0.030
 print("Finish setup")
 
+def run_servo(FR_angles, FL_angles, BR_angles, BL_angles):
+    servo.moveAbsAngle(servo.front_left_hip, np.rad2deg(FL_angles[0]))
+    servo.moveAbsAngle(servo.front_left_upper, np.rad2deg(FL_angles[1]))
+    servo.moveAbsAngle(servo.front_left_lower, np.rad2deg(FL_angles[2]))
+    servo.moveAbsAngle(servo.front_right_hip, np.rad2deg(FR_angles[0]))
+    servo.moveAbsAngle(servo.front_right_upper, np.rad2deg(FR_angles[1]))
+    servo.moveAbsAngle(servo.front_right_lower, np.rad2deg(FR_angles[2]))
+    servo.moveAbsAngle(servo.back_right_hip, np.rad2deg(BR_angles[0]))
+    servo.moveAbsAngle(servo.back_right_upper, np.rad2deg(BR_angles[1]))
+    servo.moveAbsAngle(servo.back_right_lower, np.rad2deg(BR_angles[2]))
+    servo.moveAbsAngle(servo.back_left_hip, np.rad2deg(BL_angles[0]))
+    servo.moveAbsAngle(servo.back_left_upper, np.rad2deg(BL_angles[1]))
+    servo.moveAbsAngle(servo.back_left_lower, np.rad2deg(BL_angles[2]))
+
 
 for k in range(100000000000):
     if (time.time()-lastTime >= interval):
@@ -97,9 +111,5 @@ for k in range(100000000000):
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet, __ = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
         # print (loopTime, realRoll , realPitch)
-
-        print(np.rad2deg(FL_angles[0]), np.rad2deg(FL_angles[1]), np.rad2deg(FL_angles[2]))
-
         
-
         # update_data()
