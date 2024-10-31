@@ -31,6 +31,9 @@ trot = trotGait()
 control = stabilize()
 # mpu = MPU6050()
 servo= motor_config()
+
+servo.relax_all_motors()
+time.sleep(2)
 #robot properties
 """initial safe position"""
 #angles
@@ -111,5 +114,6 @@ for k in range(100000000000):
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet, __ = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
         # print (loopTime, realRoll , realPitch)
-        
+        run_servo(FR_angles, FL_angles, BR_angles, BL_angles)
+        time.sleep(0.2)
         # update_data()
