@@ -1,34 +1,38 @@
-import time
-import board
-import busio
-from adafruit_pca9685 import PCA9685
+import RPi.GPIO as GPIO
+from time import sleep
 
-# Initialize I2C
-i2c = busio.I2C(board.SCL, board.SDA)
-pca = PCA9685(i2c)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(8, GPIO.OUT)
 
-# Set frequency to exactly 50Hz
-pca.frequency = 50
+pwm=GPIO.PWM(8, 50)
+pwm.start(0)
 
-# Calculate pulse values for standard servo timing
-# For 50Hz, full period is 20ms (0xFFFF counts)
-# 1ms = 0.05 * 0xFFFF = 0x1333
-# 1.5ms = 0.075 * 0xFFFF = 0x1998
-# 2ms = 0.1 * 0xFFFF = 0x1FFF
+def setAngle(angle):
+    duty = angle / 18 + 2
+    GPIO.output(11, True)
+    pwm.ChangeDutyCycle(duty)
+    sleep(1)
+    GPIO.output(11, False)
+    pwm.ChangeDutyCycle(duty)
 
-try:
-    while True:
-        print("0 degrees (1ms pulse)")
-        pca.channels[0].duty_cycle = 0x1333
-        time.sleep(2)
+count = 0
+numLoops = 2
+
+while count < numLoops:
+    print("set to 0-deg")
+    setAngle(0)
+    sleep(1)
+
         
-        print("90 degrees (1.5ms pulse)")
-        pca.channels[0].duty_cycle = 0x1998
-        time.sleep(2)
-        
-        print("180 degrees (2ms pulse)")
-        pca.channels[0].duty_cycle = 0x1FFF
-        time.sleep(2)
+    print("set to 90-deg")
+    setAngle(90)
+    sleep(1)
 
-except KeyboardInterrupt:
-    pca.deinit()
+    print("set to 135-deg")
+    setAngle(135)
+    sleep(1)
+    
+    count=count+1
+
+pwm.stop()
+GPIO.cleanup()

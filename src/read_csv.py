@@ -50,8 +50,17 @@ while True:
         servo.moveAbsAngle(servo.back_left_upper, BL_2_array[i])
         servo.moveAbsAngle(servo.back_left_lower, BL_3_array[i])
         print("Xong BL")
+        # servo.moveAbsAngle(servo.front_left_hip, 0)
+        # servo.moveAbsAngle(servo.front_left_hip, 90)
+        # servo.moveAbsAngle(servo.front_left_hip, -90)
+        print("Done")
+        # servo.moveAbsAngle(servo.front_left_hip, 45)
+        time.sleep(0.01)
+        # servo.moveAbsAngle(servo.front_left_hip, 0)
+        # time.sleep(5)
+        # servo.moveAbsAngle(servo.front_left_hip, 45)
+        # print("Xong FL")
 
-    time.sleep(0.01)
 
 ## HIP
 # for i in range(len(BL_1_array)):
