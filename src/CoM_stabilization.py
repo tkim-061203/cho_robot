@@ -39,7 +39,12 @@ class stabilize:
     
     def bodyCompliant(self , Xacc , Yacc , compliantMode):
         """
-        This function is used for body compliant control. If the compliant mode is activated, and the acceleration in x or y direction is higher than 7000, then a collision is detected and the robot starts to move compliantly. The force angle is calculated and the compliant length is calculated from the force module. The compliant length is then decreased linearly until it is zero. The function returns the force module, the force angle, the compliant length and a boolean indicating if the robot is in collision or not.
+        This function is used for body compliant control. If the compliant mode is activated, and the acceleration in x or y 
+        irection is higher than 7000, then a collision is detected and the robot starts to move compliantly. 
+        The force angle is calculated and the compliant length is calculated from the force module. 
+        The compliant length is then decreased linearly until it is zero. 
+        The function returns the force module, the force angle, 
+        the compliant length and a boolean indicating if the robot is in collision or not.
         
         Parameters:
         Xacc (float): acceleration in x direction
