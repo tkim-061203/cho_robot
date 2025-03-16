@@ -3,7 +3,7 @@ import time
 from servo_config import motor_config
 
 # Define the file path
-file_path = '../telemetry/stable_robot_angles.csv'
+file_path = '../telemetry/robot_angles.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path,on_bad_lines='skip')
@@ -35,19 +35,30 @@ time.sleep(2)
 while True:
     for i in range(len(BL_1_array)):
         servo.moveAbsAngle(servo.front_left_hip, FL_1_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.front_left_upper, FL_2_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.front_left_lower, FL_3_array[i])
         print("Xong FL")
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.front_right_hip, FR_1_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.front_right_upper, FR_2_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.front_right_lower, FR_3_array[i])
         print("Xong FR")
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.back_right_hip, BR_1_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.back_right_upper, BR_2_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.back_right_lower, BR_3_array[i])
         print("Xong BR")
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.back_left_hip, BL_1_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.back_left_upper, BL_2_array[i])
+        time.sleep(0.001)
         servo.moveAbsAngle(servo.back_left_lower, BL_3_array[i])
         print("Xong BL")
         # servo.moveAbsAngle(servo.front_left_hip, 0)
@@ -55,7 +66,7 @@ while True:
         # servo.moveAbsAngle(servo.front_left_hip, -90)
         print("Done")
         # servo.moveAbsAngle(servo.front_left_hip, 45)
-        time.sleep(0.01)
+        time.sleep(0.001)
         # servo.moveAbsAngle(servo.front_left_hip, 0)
         # time.sleep(5)
         # servo.moveAbsAngle(servo.front_left_hip, 45)

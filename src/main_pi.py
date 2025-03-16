@@ -6,7 +6,7 @@ from kinematic_model import robotKinematics
 from joystick import Joystick
 from gaitPlanner import trotGait
 from CoM_stabilization import stabilize
-# from mpu6050_read import MPU6050
+from mpu6050_read import MPU6050
 from servo_config import motor_config
 
 
@@ -29,7 +29,7 @@ robotKinematics = robotKinematics()
 joystick =  Joystick('/dev/input/event5')
 trot = trotGait() 
 control = stabilize()
-# mpu = MPU6050()
+mpu = MPU6050()
 servo= motor_config()
 
 servo.relax_all_motors()
@@ -98,11 +98,10 @@ for k in range(100000000000):
         t = time.time() - startTime
         
         commandPose , commandOrn , V , angle , Wrot , T , compliantMode =   joystick.read()
-        # Xacc , Yacc , Zacc = mpu.get_accel_data()
-        # realRoll , realPitch = mpu.get_roll_pitch()
-        Xacc = 0
-        Yacc = 0
         
+        Xacc , Yacc , Zacc = mpu.get_accel_data()
+        realRoll , realPitch = mpu.get_roll_pitch()
+
         forceModule , forceAngle , Vcompliant , collision = control.bodyCompliant(Xacc , Yacc , compliantMode)
             
         #calculates the feet coord for gait, defining length of the step and direction (0º -> forward; 180º -> backward)
@@ -113,7 +112,7 @@ for k in range(100000000000):
         #####   and get the angles, neccesary to reach that position, for every joint    ####
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet, __ = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
-        # print (loopTime, realRoll , realPitch)
+        print (loopTime, realRoll , realPitch)
         run_servo(FR_angles, FL_angles, BR_angles, BL_angles)
         time.sleep(0.2)
         # update_data()
