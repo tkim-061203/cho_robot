@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import smbus
 from time import sleep
 import traceback
@@ -26,8 +28,8 @@ class MPU6050:
 
     def init_sensor(self):
         self.bus.write_byte_data(self.DEVICE_ADDRESS, self.PWR_MGMT_1, 0)
-        self.bus.write_byte_data(self.DEVICE_ADDRESS, 0x1C, 0x00)  # Accelerometer range Â±2g
-        self.bus.write_byte_data(self.DEVICE_ADDRESS, self.GYRO_CONFIG, 0x00)  # Gyro range Â±250Â°/s
+        self.bus.write_byte_data(self.DEVICE_ADDRESS, 0x1C, 0x00)  # Accelerometer range ±2g
+        self.bus.write_byte_data(self.DEVICE_ADDRESS, self.GYRO_CONFIG, 0x00)  # Gyro range ±250°/s
         self.bus.write_byte_data(self.DEVICE_ADDRESS, self.PWR_MGMT_1, 0x01)
         self.bus.write_byte_data(self.DEVICE_ADDRESS, self.SMPLRT_DIV, 0x07)
         print("MPU6050 initialized")
@@ -60,6 +62,10 @@ class MPU6050:
             self.read_raw_data(self.GYRO_ZOUT_H)
         )
 
+    def get_roll_pitch(self):
+        acc_x, acc_y, acc_z = self.get_accel_data()
+        return self.calculate_roll_pitch(acc_x, acc_y, acc_z)
+
     def calculate_roll_pitch(self, acc_x, acc_y, acc_z):
         roll = atan2(acc_y, acc_z) * 180 / pi
         pitch = atan2(-acc_x, sqrt(acc_y**2 + acc_z**2)) * 180 / pi
@@ -68,7 +74,7 @@ class MPU6050:
     def get_sensor_data(self):
         acc_x, acc_y, acc_z = self.get_accel_data()
         gyro_x, gyro_y, gyro_z = self.get_gyro_data()
-        roll, pitch = self.calculate_roll_pitch(acc_x, acc_y, acc_z)
+        roll, pitch = self.get_roll_pitch()
         return {
             "acceleration": {"x": acc_x / 16384, "y": acc_y / 16384, "z": acc_z / 16384},
             "gyroscope": {"x": gyro_x / 131, "y": gyro_y / 131, "z": gyro_z / 131},
@@ -77,8 +83,12 @@ class MPU6050:
         }
 
 if __name__ == "__main__":
-    mpu = MPU6050Reader()
+    mpu = MPU6050()
     while True:
+        Xacc, Yacc, Zacc = mpu.get_accel_data()
+        realRoll, realPitch = mpu.get_roll_pitch()
         data = mpu.get_sensor_data()
+        print(f"Xacc: {Xacc}, Yacc: {Yacc}, Zacc: {Zacc}")
+        print(f"Roll: {realRoll}, Pitch: {realPitch}")
         print(data)
         sleep(1)

@@ -112,7 +112,7 @@ for k in range(100000000000):
         #####   and get the angles, neccesary to reach that position, for every joint    ####
         FR_angles, FL_angles, BR_angles, BL_angles , transformedBodytoFeet, __ = robotKinematics.solve(orn + commandOrn, pos + commandPose , bodytoFeet)
 
-        print (loopTime, realRoll , realPitch)
+        # print (loopTime, realRoll , realPitch)
         run_servo(FR_angles, FL_angles, BR_angles, BL_angles)
         time.sleep(0.2)
         # update_data()
