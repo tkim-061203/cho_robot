@@ -104,7 +104,12 @@ for k in range(100000000000):
 
         forceModule , forceAngle , Vcompliant , collision = control.bodyCompliant(Xacc , Yacc , compliantMode)
         #calculates the feet coord for gait, defining length of the step and direction (0º -> forward; 180º -> backward)
-        bodytoFeet  = trot.loop(V + Vcompliant , angle + forceAngle , Wrot , T , offset , bodytoFeet0)
+        if joystick.poseMode:
+            print("In pose mode")
+            bodytoFeet = bodytoFeet0
+        else:
+            print("Out pose mode")
+            bodytoFeet  = trot.loop(V + Vcompliant , angle + forceAngle , Wrot , T , offset , bodytoFeet0)
         
         #####################################################################################
         #####   kinematics Model: Input body orientation, deviation and foot position    ####
